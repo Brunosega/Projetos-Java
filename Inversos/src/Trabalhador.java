@@ -58,7 +58,7 @@ public class Trabalhador extends Thread {
 					//ADMIN
 					while(true){
 
-						saida.writeUTF("Opcoes: \n1-Inverter String \n2-Novo usuario\n3-Adicionar creditos");
+						saida.writeUTF("Opcoes: \n1-Inverter String \n2-Novo usuario\n3-Adicionar creditos\n4-Excluir usuario");
 						switch(entrada.readInt()) {
 						
 						//inverter string
@@ -135,6 +135,36 @@ public class Trabalhador extends Thread {
 								saida.writeUTF("Creditos adicionados ao usuario!");
 							}
 							break;
+
+							//excluir usuario
+							case 4:
+								saida.writeUTF("Nome do usuário:");
+								usuario = entrada.readUTF();
+								Path path11 = Paths.get("dados.txt");
+								novo = true;
+								fileReader = new FileReader("dados.txt");
+								bufferedReader = new BufferedReader(fileReader);
+								//Procura usuario no arquivo
+								while((line = bufferedReader.readLine()) != null){
+									array = line.split("\t");
+									if(array[0].equals(usuario)) {
+										restantes = Integer.parseInt(array[1]);
+										novo = false;
+										break;
+									}
+								}
+								bufferedReader.close();
+								if(novo) {
+									saida.writeUTF("Usuário não encontrado!");
+								}
+								else {
+									Charset charset = StandardCharsets.UTF_8;
+									String content = new String(Files.readAllBytes(path11), charset);
+									content = content.replaceAll(usuario + '\t' + restantes, " ");
+									Files.write(path11, content.getBytes(charset));
+									saida.writeUTF("Creditos adicionados ao usuario!");
+								}
+								break;
 						default:
 							saida.writeUTF("Desconectado.");
 							t.close();

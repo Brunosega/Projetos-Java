@@ -19,7 +19,7 @@ public class Cliente {
 			String texto;
 			String usuario;
 			boolean admin = false;
-			Socket s = new Socket("127.0.0.1", 5000);
+			Socket s = new Socket("10.95.56.147", 5000);
 			DataOutputStream saida = new DataOutputStream( s.getOutputStream());
 			DataInputStream entrada = new DataInputStream( s.getInputStream());
 			
@@ -72,6 +72,14 @@ public class Cliente {
 								System.out.println(entrada.readUTF());
 								s.close();
 								break;
+							case 4:
+								saida.writeInt(4);
+								//case servidor
+								System.out.println(entrada.readUTF());
+								scanner.nextLine();
+								saida.writeUTF(scanner.nextLine());
+								System.out.println(entrada.readUTF());
+								break;
 						}
 					}
 				}
@@ -100,10 +108,12 @@ public class Cliente {
 			s.close(); // encerra a conexao com o servidor
 			} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
+				System.out.println("Servidor desconectado!");
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Servidor não encontrado!");
+			//e.printStackTrace();
 		}
 		
 	}
